@@ -1,0 +1,9 @@
+#map{ /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
+	height:900px;
+	margin-bottom:10px
+	width:100%;
+}
+
+.leaflet-tooltip-top {
+    margin-top: -20px; // Valeur par défaut -6px
+}
