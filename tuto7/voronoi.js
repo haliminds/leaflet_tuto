@@ -36,7 +36,7 @@ info.update = function (e) {
         +  '</span><br/>Code OACI : <span style="font-weight:bold;">' + e.oaci_code
         +  '</span><br/>Longueur de piste : <span style="font-weight:bold;">' + e.length_pist + ' m'
         +  '</span><br/>Largeur de piste : <span style="font-weight:bold;">' + e.width + ' m'
-        +  '</span><br/>Altitude : <span style="font-weight:bold;">' + e.high + ' m' 
+        +  '</span><br/>Altitude : <span style="font-weight:bold;">' + e.high + ' m'
 		+  '</span><br/>Surface Secteur : <span style="font-weight:bold;">' + e.area + '</span>';
 };
 
@@ -59,12 +59,13 @@ function AirportPoint(airport_data) {
 
 // chargement des points et transformation diu tableau en objet
 var points = [];
-for (let i=0;i<airport.length; ++i)
-{
-	var current_airport = new AirportPoint(airport[i]);
-	var marker = new L.Marker([current_airport.latitude, current_airport.longitude], {title: current_airport.airport}).addTo(map);
-	points.push(current_airport);
-}
+
+airport.forEach((item, i) => {
+  const current_airport = new AirportPoint(item);
+  const marker = new L.Marker([current_airport.latitude, current_airport.longitude], {title: current_airport.airport}).addTo(map);
+  points.push(current_airport);
+});
+
 
 // Comme toujours avec D3JS lorsqu'un type de graphique a été intégré, il est très
 // facile à mettre en oeuvre. la fonction voronoi appliquée sur la liste des points
@@ -88,52 +89,55 @@ for (let i = 0; i < voronoiPolygons.length; ++i) {
 	// create "real" polygon with first point equal last for turf package
 	let poly_voro_list = voronoiPolygons[i].slice(0, voronoiPolygons[i].length);
 	poly_voro_list.push(voronoiPolygons[i][0]);
-	poly_voro_turf = turf.polygon([poly_voro_list]);	
-	
+	poly_voro_turf = turf.polygon([poly_voro_list]);
+
 	// verifie si les polygones de voronoi sortent des frontieres
 	let is_pt_out = false;
-	for (let id_pt=0; id_pt<voronoiPolygons[i].length; ++id_pt)
-	{
-		if (!d3.polygonContains(france.geometry.coordinates[0], voronoiPolygons[i][id_pt]))
+
+  voronoiPolygons[i].some(function(element, index) {
+    if (!d3.polygonContains(france.geometry.coordinates[0], element))
 		{
 			is_pt_out = true;
-			break
+			return true;
 		}
-	}
+  });
+
+
 	// si ca sort, on calcule l'intersection entre la frontiere et le polygone
 	if (is_pt_out){
 		var geo_json_airpoirt_polygon = turf.intersect(poly_voro_turf, poly_france_turf);
-		
+
 		// compute area
 		let area = 0
 		if (geo_json_airpoirt_polygon.geometry.type == "Polygon")
 		{
-			area = d3.polygonArea(geo_json_airpoirt_polygon.geometry.coordinates[0]);	
+			area = d3.polygonArea(geo_json_airpoirt_polygon.geometry.coordinates[0]);
 		}
 		else
 		{
-			for (let ipoly=0; ipoly< geo_json_airpoirt_polygon.geometry.coordinates.length; ++ipoly)
-			{
-				area += d3.polygonArea(geo_json_airpoirt_polygon.geometry.coordinates[ipoly][0]);
-			}
+
+      geo_json_airpoirt_polygon.geometry.coordinates.forEach((item, i) => {
+        area += d3.polygonArea(item[0]);
+      });
+
 		}
 		// mis à jour des property
-		let property = {"airport" : voronoiPolygons[i].data.airport, "oaci_code" : voronoiPolygons[i].data.oaci_code, "length_pist" : voronoiPolygons[i].data.length_pist, "width" : voronoiPolygons[i].data.width, "high" : voronoiPolygons[i].data.high, "area": area};	
+		let property = {"airport" : voronoiPolygons[i].data.airport, "oaci_code" : voronoiPolygons[i].data.oaci_code, "length_pist" : voronoiPolygons[i].data.length_pist, "width" : voronoiPolygons[i].data.width, "high" : voronoiPolygons[i].data.high, "area": area};
 		geo_json_airpoirt_polygon.properties = property;
 
 	}
 	else
 	{
-		let area = d3.polygonArea(voronoiPolygons[i]);	
-		let property = {"airport" : voronoiPolygons[i].data.airport, "oaci_code" : voronoiPolygons[i].data.oaci_code, "length_pist" : voronoiPolygons[i].data.length_pist, "width" : voronoiPolygons[i].data.width, "high" : voronoiPolygons[i].data.high, "area": area};	
-		var geo_json_airpoirt_polygon = {"type": "FeatureCollection","features": [{"type": "Feature", "geometry": {"type": "Polygon","coordinates": [voronoiPolygons[i]]}, "properties": property  }]};	
+		let area = d3.polygonArea(voronoiPolygons[i]);
+		let property = {"airport" : voronoiPolygons[i].data.airport, "oaci_code" : voronoiPolygons[i].data.oaci_code, "length_pist" : voronoiPolygons[i].data.length_pist, "width" : voronoiPolygons[i].data.width, "high" : voronoiPolygons[i].data.high, "area": area};
+		var geo_json_airpoirt_polygon = {"type": "FeatureCollection","features": [{"type": "Feature", "geometry": {"type": "Polygon","coordinates": [voronoiPolygons[i]]}, "properties": property  }]};
 	}
 
 	// create polygon for map
-	var geoJSONLayer = L.geoJson(geo_json_airpoirt_polygon, {style:style, onEachFeature: onEachFeature}).addTo(map); 		
+	var geoJSONLayer = L.geoJson(geo_json_airpoirt_polygon, {style:style, onEachFeature: onEachFeature}).addTo(map);
 };
 let endTime = new Date();
-let timeDiff = endTime - startTime; //in ms	
+let timeDiff = endTime - startTime; //in ms
 console.log(timeDiff + " ms");
 
 
