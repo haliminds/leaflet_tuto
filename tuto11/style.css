@@ -1,0 +1,5 @@
+#map{ /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
+	height:900px;
+	margin-bottom:10px;
+	width:100%;
+}
