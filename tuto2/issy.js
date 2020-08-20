@@ -1,7 +1,7 @@
 // based on https://www.datavis.fr/index.php?page=leaflet-control
 function initialize()
 {
-// Creation d'un tableau contennat les categories (dans cat2)	
+// Creation d'un tableau contenant les categories (dans cat2)
 var cats = [];
 // Parse tout le geojson
 for (var i = 0; i < geojson.features.length; i++) {
@@ -16,7 +16,7 @@ for (var i = 0; i < geojson.features.length; i++) {
         }
         cats.push(cat);
     }
-	// j'update la categorie avec l'ajout de l'element en cours 
+	// j'update la categorie avec l'ajout de l'element en cours
     cat["interestPoints"].addData(geojson.features[i]);
 }
 
@@ -86,7 +86,7 @@ function getCat(tabCat, category)
 	return undefined;
 }
 
-// On genere un objet L.geoJson vide que l'on va remplir avec addData. 
+// On genere un objet L.geoJson vide que l'on va remplir avec addData.
 function createInterestPoints () {
     return new L.geoJson([], {
 		// On definir la representation des point sur le layer avec la propriete pointToLayer
@@ -128,7 +128,7 @@ function createInterestPoints () {
     });
 }
 
-// Defini le type d'icone selon la cetegorie 
+// Defini le type d'icone selon la cetegorie
 function getIcon(categorie1, categorie2, categorie3) {
 	if (categorie3 === "Coiffeurs") {
 		return "map-icons/saloon.png";
@@ -179,7 +179,7 @@ function getIcon(categorie1, categorie2, categorie3) {
 	} else if (categorie3 === "Parkings voitures sous-sol") {
 		return  "map-icons/automotive.png";
 	}
-	
+
 	if (categorie2 === "Entreprises TIC + de 50 salari\u00e9s") {
 		return  "map-icons/professional.png";
 	} else if (categorie2 === "Education") {
@@ -193,6 +193,6 @@ function getIcon(categorie1, categorie2, categorie3) {
 	} else if (categorie3 === "Cyber cité") {
 		return  "map-icons/internet.png";
 	}
-	
+
 	return "map-icons/default.png";
 }

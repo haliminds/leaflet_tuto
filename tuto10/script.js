@@ -3,7 +3,7 @@ var marker = null
 
 function initialize() {
 	navigator.geolocation.getCurrentPosition(maPosition)
-	var survId = navigator.geolocation.watchPosition(surveillePosition, erreurPosition, {maximumAge:3000,enableHighAccuracy:false});
+	var survId = navigator.geolocation.watchPosition(surveillePosition, erreurPosition, {maximumAge:1000,enableHighAccuracy:true});
 }
 
 function erreurPosition(error) {
@@ -35,12 +35,12 @@ function maPosition(position) {
 		ext: 'png'
 	});
 	// ajout du layer a la carte
-	map.addLayer(stamenToner);		
+	map.addLayer(stamenToner);
 	marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
 }
 
 // Fonction de callback en cas de succès
 function surveillePosition(position) {
 	marker.setLatLng([position.coords.latitude, position.coords.longitude]);
-	map.panTo(position.coords.latitude, position.coords.longitude]);
+	map.panTo([position.coords.latitude, position.coords.longitude]);
 }
