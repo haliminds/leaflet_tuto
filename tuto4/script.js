@@ -18,7 +18,7 @@ async function initialize() {
 		})]).addTo(map);
 
 
-		var mask = L.tileLayer.mask('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		var mask = L.tileLayer.mask('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 			attribution: '<a href="http://habs.dc.affrc.go.jp/">NIAES, NARO</a>',
 			maskSize: 128,
 			maxZoom: 18,
@@ -28,27 +28,27 @@ async function initialize() {
 		map.on("mousemove", function(e) {
 			mask.setCenter(e.containerPoint);
 		});
-		
-		
+
+
 	await loadAmenity();
 
 	for(let i = 0; i < markersAmenity.length; i++) {
 		for(let layerMarker of markersAmenity[i]){
 			mainLayer.addLayer(layerMarker);
-		}		
-	}			
-	
+		}
+	}
+
 
 }
 
 
 async function loadAmenity(){
 	for (let i in tabAmenity){
-		markersAmenity[i] = [];	
-		let overpassUrl = 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];area(3600080348)->.searchArea;node[amenity='+ tabAmenity[i].amenity +'](area.searchArea);out;';	
+		markersAmenity[i] = [];
+		let overpassUrl = 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];area(3600080348)->.searchArea;node[amenity='+ tabAmenity[i].amenity +'](area.searchArea);out;';
 		let response = await fetch(overpassUrl);
-		let osmDataAsJson = await response.json(); // read response body and parse as JSON	
-		
+		let osmDataAsJson = await response.json(); // read response body and parse as JSON
+
 		for (let elem of osmDataAsJson.elements)
 		{
 			let binpopup = tabAmenity[i].amenity.split('=')[1];

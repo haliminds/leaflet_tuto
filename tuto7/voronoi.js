@@ -1,7 +1,7 @@
 // Based on https://www.datavis.fr/index.php?page=leaflet-cluster
 function initialize()
 {
-var stamenToner = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+var stamenToner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
     attribution: 'Map tiles by Stamen Design, CC BY 3.0 - Map data © OpenStreetMap',
     subdomains: 'abcd',
     minZoom: 6,

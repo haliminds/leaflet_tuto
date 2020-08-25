@@ -2,14 +2,14 @@ var markersAmenity = [];
 const tabAmenity = [{'amenity':'waste_basket', 'color':'#FF0000'}, {'amenity':'bicycle_parking', 'color':'#0000FF'}, {'amenity':'bench', 'color':'#00FF00'}];
 
 async function initialize() {
-	
+
 	var map = L.map('map', {
 		center: [45.18, 5.740],
 		maxZoom: 20,
 		zoom: 13,
 		zoomControl: false
 	});
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+	L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 
 	await loadAmenity();
 
@@ -32,11 +32,11 @@ async function initialize() {
 
 async function loadAmenity(){
 	for (let i in tabAmenity){
-		markersAmenity[i] = [];	
-		let overpassUrl = 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];area(3600080348)->.searchArea;node[amenity='+ tabAmenity[i].amenity +'](area.searchArea);out;';	
+		markersAmenity[i] = [];
+		let overpassUrl = 'https://lz4.overpass-api.de/api/interpreter?data=[out:json];area(3600080348)->.searchArea;node[amenity='+ tabAmenity[i].amenity +'](area.searchArea);out;';
 		let response = await fetch(overpassUrl);
-		let osmDataAsJson = await response.json(); // read response body and parse as JSON	
-		
+		let osmDataAsJson = await response.json(); // read response body and parse as JSON
+
 		for (let elem of osmDataAsJson.elements)
 		{
 			let binpopup = tabAmenity[i].amenity.split('=')[1];

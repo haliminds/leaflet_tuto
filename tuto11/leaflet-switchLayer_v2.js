@@ -88,7 +88,7 @@ SwitchLayerManager_v2 = L.Class.extend({
 			}
 		}
 
-		// verifie si test_zoom est coherent ie test_zoom[z] = z;
+		// verifie si test_zoom est coherent ie pour tout z, test_zoom[z] = z;
 
 
 
