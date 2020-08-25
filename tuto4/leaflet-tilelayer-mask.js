@@ -91,7 +91,6 @@
       var level = this._levels[zoom];
       if (!level) {
         var map = this._map;
-        console.log(map)
         level = {
           el: this._container.appendChild(L.SVG.create("g")),
           origin: map.project(map.unproject(map.getPixelOrigin()), zoom).round(),
