@@ -2,6 +2,11 @@ const OVERPASS_API = 'https://z.overpass-api.de/api/interpreter?data=[out:json];
 const SEARCH_DIST_KM = 0.2
 const NUMBER_OF_COMPUTED_PATH = 5
 
+const BICYCLE_PARKING_ICON = L.icon({
+  iconUrl: '240px-Parking-bicycle-16.svg.png',
+  iconSize:     [32, 32], // size of the icon
+});
+
 function showPathToNearestCyclePark(lat_to=null, lon_to=null)
 {
     // before showing the map, show a gif
@@ -40,19 +45,20 @@ function fillMapInnerHTML(htmlString)
 
 function geolocFail()
 {
-	const htmlString = '<br><br>GPS non activé !';
-	fillMapInnerHTML(htmlString);
+	fillMapInnerHTML('<br><br>GPS non activé !');
 }
 
 function clearMap()
 {
-    const htmlString = '';
-    fillMapInnerHTML(htmlString);
+    fillMapInnerHTML('');
 }
 
 async function showPathToNearestCycleParkWithPos(lat, lon, lat_to=null, lon_to=null)
 {
 	let macarte = null;
+  lat = 45.180246;
+  lon = 5.714562;
+
 	const currentPos = [lat,lon]; // current position
 	let closestPos = [lat,lon];
 	if ((lat_to != null) && (lon_to != null))
@@ -99,8 +105,6 @@ async function showPathToNearestCycleParkWithPos(lat, lon, lat_to=null, lon_to=n
   {urlTabForCycleParkPath.push('https://router.project-osrm.org/route/v1/driving/'+currentPos[1]+','+currentPos[0]+';'+parkingNode[1].lon+','+parkingNode[1].lat+'?geometries=geojson');}
   );
 
-  console.log(urlTabForCycleParkPath)
-
   Promise.all(urlTabForCycleParkPath.map(url =>
   fetch(url)
   .then(checkStatus)
@@ -109,35 +113,20 @@ async function showPathToNearestCycleParkWithPos(lat, lon, lat_to=null, lon_to=n
   ))
   .then(data => {
 
-    let maxDist = 10000; // 10 km.
-    let nearestPath = null;
+    // sort data by distance and get the shortest path
+    data.sort(function(a,b){return a.routes[0].distance-b.routes[0].distance})
+    const maxDist = data[0].routes[0].distance; // 10 km.
+    const nearestPath = horizontalFlip(data[0].routes[0].geometry.coordinates);
 
-    data.forEach(function(path)
-    {
-      const dist = path.routes[0].distance;
-      if (dist<maxDist)
-      {
-        maxDist = dist;
-        nearestPath = path;
-      }
-    }
-    );
-
-    nearestPath = horizontalFlip(nearestPath.routes[0].geometry.coordinates);
     cycleParkPos = nearestPath[nearestPath.length - 1] // the the shortest
     // create empty map
     macarte = createEmptyMapWithCurrentPos(macarte, currentPos)
 
-    const bicycleParkingIcon = L.icon({
-      iconUrl: '240px-Parking-bicycle-16.svg.png',
-      iconSize:     [32, 32], // size of the icon
-    });
-    const markerCyclePark = L.marker(cycleParkPos, {icon: bicycleParkingIcon}).addTo(macarte);
+    const markerCyclePark = L.marker(cycleParkPos, {icon: BICYCLE_PARKING_ICON}).addTo(macarte);
     const CycleParkTitle = 'Distance : '+ maxDist + 'm';
     const offsetPopup = L.point(0, -10);
     markerCyclePark.bindPopup(CycleParkTitle, {'offset':offsetPopup}).openPopup();
 
-    const myLayer = L.geoJSON().addTo(macarte);
     const polylineOptions = {
       color: 'red',
       weight: 4,

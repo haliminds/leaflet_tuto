@@ -51,6 +51,7 @@
         this._image.setAttribute("y", p.y);
       }
     },
+
     _initContainer: function() {
       if (this._container) return;
       var rootGroup = this._map.getRenderer(this)._rootGroup;
@@ -59,7 +60,7 @@
       var mask = defs.appendChild(L.SVG.create("mask"));
       var image = mask.appendChild(L.SVG.create("image"));
       var size = this.getMaskSize();
-	  	  
+
       mask.setAttribute("id", "leaflet-tilelayer-mask-" + L.stamp(this));
       mask.setAttribute("x","-100%");
       mask.setAttribute("y","-100%");
@@ -73,8 +74,8 @@
       this._image = image;
       this.setCenter(this._map.getSize().divideBy(2));
     },
-    _updateLevels: function() {
 
+    _updateLevels: function() {
       var zoom = this._tileZoom;
       if (zoom === undefined)
         return undefined;
@@ -90,6 +91,7 @@
       var level = this._levels[zoom];
       if (!level) {
         var map = this._map;
+        console.log(map)
         level = {
           el: this._container.appendChild(L.SVG.create("g")),
           origin: map.project(map.unproject(map.getPixelOrigin()), zoom).round(),
@@ -102,6 +104,7 @@
       this._level = level;
       return level;
     },
+
     _addTile: function(coords, container) {
       var tilePos = this._getTilePos(coords);
       var tileSize = this.getTileSize();

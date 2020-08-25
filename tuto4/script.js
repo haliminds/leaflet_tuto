@@ -7,30 +7,19 @@ async function initialize() {
 		var map = L.map("map", {
 			zoom: 16,
 			center: [45.18, 5.740],
-			maxZoom: 18,
+			maxZoom: 20,
 			minZoom: 15
 		});
-		map.zoomControl.setPosition("bottomright");
-		map.attributionControl.addAttribution("<a href='https://github.com/frogcat/leaflet-tilelayer-mask'>fork me on GitHub</a>");
-		var mainLayer = L.layerGroup([L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', {
+		map.zoomControl.setPosition("topleft");
+		//map.attributionControl.addAttribution("<a href='https://github.com/frogcat/leaflet-tilelayer-mask'>fork me on GitHub</a>");
+
+		const osmMain = L.layerGroup([L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', {
 			attribution: '<a href="http://maps.gsi.go.jp/development/">GSI Ortho</a>',
 			ext: 'png'
-		})]).addTo(map);
+		})])
+		var mainLayer =  osmMain.addTo(map);
 
-
-		var mask = L.tileLayer.mask('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			attribution: '<a href="http://habs.dc.affrc.go.jp/">NIAES, NARO</a>',
-			maskSize: 128,
-			maxZoom: 18,
-			maxNativeZoom: 17
-		}).addTo(map);
-
-		map.on("mousemove", function(e) {
-			mask.setCenter(e.containerPoint);
-		});
-
-
-	await loadAmenity();
+	 await loadAmenity();
 
 	for(let i = 0; i < markersAmenity.length; i++) {
 		for(let layerMarker of markersAmenity[i]){
@@ -38,7 +27,15 @@ async function initialize() {
 		}
 	}
 
+	let mask = L.tileLayer.mask('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+		maxZoom: 20,
+		maskSize: 128,
+		attribution: '&copy; Openstreetmap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
 
+	map.on("mousemove", function(e) {
+		mask.setCenter(e.containerPoint);
+	});
 }
 
 
@@ -51,9 +48,8 @@ async function loadAmenity(){
 
 		for (let elem of osmDataAsJson.elements)
 		{
-			let binpopup = tabAmenity[i].amenity.split('=')[1];
+			let binpopup = tabAmenity[i].amenity;
 			let marker = new L.CircleMarker([elem.lat, elem.lon], {radius: 10, fillOpacity: 0.8, color: tabAmenity[i].color}).bindPopup(binpopup);
-			marker.l = i;
 			markersAmenity[i].push(marker);
 		}
 	}

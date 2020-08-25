@@ -1,7 +1,11 @@
-#map{ /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
-	height:900px;
-	margin-bottom:10px;
-	width:100%;
+/* For all devices: */
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100%;
+    width: 100vw;
 }
 
 .leaflet-marker-icon {
@@ -10,7 +14,7 @@
 }
 
 /* ecriture dans le cluster*/
-.cluster { 
+.cluster {
     padding: 5px 10px;
     color: white;
 }

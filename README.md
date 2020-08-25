@@ -31,6 +31,13 @@ Chargement de 3 jeux de données par Overpass et affichage de 3 Clustergroup sim
 Utilisation de watchPosition et centrage sur la position en cours.
 
 ### Tuto 11
-!! TEST EN COURS !! Création d'un plugin de switch de layer auto selon le zoom
+Création d'un plugin de switch de layer auto selon le zoom.
+
+### Tuto 12
+Utilisation d'Overpass et OSRM pour trouver l'arceau le plus proche et voir comment y aller.
+
+### Tuto 13
+Ajout de marker par click sur plusieurs layers.
+
 
 <!-- please comment -->
