@@ -1,7 +1,11 @@
-#map{ /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
-	height:900px;
-	margin-bottom:10px
-	width:100%;
+/* For all devices: */
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100%;
+    width: 100vw;
 }
 
 .info {
@@ -24,7 +28,7 @@
     opacity: 0.6;
     pointer-events: visible !important;
 }
-        
+
 .cell:hover {
     stroke: black;
     stroke-width: 5px;

@@ -27,7 +27,7 @@ function erreurPosition(error) {
 
 function maPosition(position) {
 	map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 13);
-	var stamenToner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+	const stamenToner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
 		attribution: 'Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap',
 		subdomains: 'abcd',
 		minZoom: 13,

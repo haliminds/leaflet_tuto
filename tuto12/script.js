@@ -20,7 +20,7 @@ function showPathToNearestCyclePark(lat_to = null, lon_to = null) {
       timeout: 5000
     };
 
-    navigator.geolocation.getCurrentPosition(function(position) {
+    navigator.geolocation.getCurrentPosition(position => {
       clearTimeout(location_timeout);
       const lat_from = position.coords.latitude;
       const lon_from = position.coords.longitude;
