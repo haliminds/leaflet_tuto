@@ -39,5 +39,7 @@ Utilisation d'Overpass et OSRM pour trouver l'arceau le plus proche et voir comm
 ### Tuto 13
 Ajout de marker par click sur plusieurs layers.
 
+### Tuto 14
+Ajout d'un slider sur la carte
 
 <!-- please comment -->
