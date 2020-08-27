@@ -24,7 +24,7 @@ function showPathToNearestCyclePark(lat_to = null, lon_to = null) {
       clearTimeout(location_timeout);
       const lat_from = position.coords.latitude;
       const lon_from = position.coords.longitude;
-      showPathToNearestCycleParkWithPos(lat_from, lon_from, lat_to, lon_to);
+      showPathToNearestCycleParkWithPos(lat_from, lon_from);
     }, function(error) {
       clearTimeout(location_timeout);
       geolocFail();
@@ -48,7 +48,7 @@ function clearMap() {
   fillMapInnerHTML('');
 }
 
-async function showPathToNearestCycleParkWithPos(lat, lon, lat_to = null, lon_to = null) {
+async function showPathToNearestCycleParkWithPos(lat, lon) {
   let macarte = null;
   const currentPos = [lat, lon]; // current position
   boundingBox = getBoundingBox(currentPos, SEARCH_DIST_KM); // 200m autour de moi
