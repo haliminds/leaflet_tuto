@@ -42,4 +42,7 @@ Ajout de marker par click sur plusieurs layers.
 ### Tuto 14
 Ajout d'un slider sur la carte
 
+### Tuto 15
+Selection d'un point sur la carte après déplacement/glissement de la carte
+
 <!-- please comment -->
